@@ -2,7 +2,7 @@
 
 namespace App\Entity\Site;
 
-use App\Entity\User;
+use App\Entity\User\User;
 use App\Repository\Site\SiteStatusRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,8 +29,7 @@ class SiteStatus
 
     public function setUuid(string $newUuid): self
     {
-        if ($this->id == null)
-        {
+        if ($this->id == null) {
             $this->id = $newUuid;
         }
 

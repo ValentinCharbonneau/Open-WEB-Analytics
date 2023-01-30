@@ -2,38 +2,46 @@
 
 namespace App\Entity\User;
 
-use App\Entity\Site;
-use App\Repository\User\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Site\SiteStatus;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\User\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity("email")]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\Column(length: 32)]
-    private ?string $id = null;
+    private ?string $id;
 
     #[ORM\Column(length: 180, unique: true)]
-    private ?string $email = null;
+    #[Assert\NotBlank(message: "Email is required")]
+    #[Assert\Email(message: "Invalid format")]
+    private string $email;
 
     #[ORM\Column]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
+    #[Assert\NotBlank(message: "Password is required")]
+    #[Assert\Length(min: 8, minMessage: "Your password must have a minimum length of 8 characters")]
+    #[Assert\Regex('/[\$\&\+\,\:\;\=\?\@\#\|\'\<\>\.\-\^\*\(\)\%\!]/', message: "Your password must contain a special character")]
+    private string $plainPassword;
+
     #[ORM\Column]
-    private ?string $password = null;
+    private string $password;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: SiteStatus::class)]
     private Collection $siteStatuses;
 
     public function __construct()
     {
+        $this->id = null;
         $this->siteStatuses = new ArrayCollection();
     }
 
@@ -44,8 +52,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setUuid(string $newUuid): self
     {
-        if ($this->id == null)
-        {
+        if ($this->id == null) {
             $this->id = $newUuid;
         }
 
@@ -89,6 +96,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function getPlainPassword(): string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
 
         return $this;
     }

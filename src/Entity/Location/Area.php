@@ -35,8 +35,7 @@ class Area
 
     public function setUuid(string $newUuid): self
     {
-        if ($this->id == null)
-        {
+        if ($this->id == null) {
             $this->id = $newUuid;
         }
 
