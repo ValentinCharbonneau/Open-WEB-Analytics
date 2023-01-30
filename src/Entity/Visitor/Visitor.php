@@ -2,6 +2,9 @@
 
 namespace App\Entity\Visitor;
 
+use App\Entity\Site\Site;
+use App\Entity\Location\Country;
+use App\Entity\Location\Departement;
 use App\Repository\Visitor\VisitorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -50,8 +53,7 @@ class Visitor
 
     public function setUuid(string $newUuid): self
     {
-        if ($this->id == null)
-        {
+        if ($this->id == null) {
             $this->id = $newUuid;
         }
 

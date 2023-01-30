@@ -2,7 +2,7 @@
 
 namespace App\Entity\Site;
 
-use App\Entity\Visitor;
+use App\Entity\Visitor\Visitor;
 use App\Repository\Site\SiteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -41,8 +41,7 @@ class Site
 
     public function setUuid(string $newUuid): self
     {
-        if ($this->id == null)
-        {
+        if ($this->id == null) {
             $this->id = $newUuid;
         }
 

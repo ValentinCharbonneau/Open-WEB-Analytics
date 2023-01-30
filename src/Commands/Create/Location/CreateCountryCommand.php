@@ -293,17 +293,15 @@ class CreateCountryCommand extends Command
         ["Zambia", "zm"],
         ["Zimbabwe", "zw"]
     ];
-    
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        foreach(CreateCountryCommand::$_tld as $country)
-        {   
-            if (sizeof($this->countryRepository->findBy(['shortName' => strtoupper($country[1])])) < 1)
-            {
+        foreach (CreateCountryCommand::$_tld as $country) {
+            if (sizeof($this->countryRepository->findBy(['shortName' => strtoupper($country[1])])) < 1) {
                 $newCountry = new Country();
                 $newCountry->setShortName(strtoupper($country[1]));
                 $newCountry->setFullName($country[0]);
-    
+
                 $this->entityManagerInterface->persist($newCountry);
             }
         }
