@@ -5,6 +5,7 @@ namespace App\Entity\Security;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
 use Symfony\Component\Serializer\Annotation\Groups;
 use App\Controller\Security\AuthenticatorLoginController;
 use App\Controller\Security\AuthenticatorRegisterController;
@@ -48,9 +49,11 @@ class Authenticator
     private ?int $expire;
 
     #[Groups(['auth:user'])]
+    #[ApiProperty(example: "user@owa.fr")]
     private ?string $email;
 
     #[Groups(['auth:user'])]
+    #[ApiProperty(example: "P@ss0rd_9")]
     private ?string $password;
 
     public function getToken(): ?string
